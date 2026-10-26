@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ArthaSeer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#12b886"/><path d="M5 19l5-6 4 3 6-8 3 4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><h1>ArthaSeer</h1><p>AI stock price predictor</p></div>
+    </div>
+    <span id="badge" class="badge hidden"></span>
+  </header>
+
+  <main>
+    <section class="panel controls">
+      <form id="form">
+        <label>Ticker
+          <input id="ticker" value="AAPL" maxlength="15" autocomplete="off" spellcheck="false" />
+        </label>
+        <label>History
+          <select id="period"><option>2y</option><option selected>5y</option><option>10y</option></select>
+        </label>
+        <label>Predict ahead
+          <select id="horizon"><option value="1" selected>1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="5">5 days</option></select>
+        </label>
+        <label>Forecast path
+          <select id="days"><option value="5">5 days</option><option value="10" selected>10 days</option><option value="20">20 days</option><option value="30">30 days</option></select>
+        </label>
+        <button id="go" type="submit">Train &amp; Predict</button>
+      </form>
+      <div class="chips" id="chips">
+        <span>Try:</span>
+        <button type="button" data-t="AAPL">AAPL</button>
+        <button type="button" data-t="MSFT">MSFT</button>
+        <button type="button" data-t="TSLA">TSLA</button>
+        <button type="button" data-t="TCS.NS">TCS.NS</button>
+        <button type="button" data-t="RELIANCE.NS">RELIANCE.NS</button>
+        <button type="button" data-t="^NSEI">NIFTY 50</button>
+      </div>
+    </section>
+
+    <div id="status" class="status hidden"></div>
+
+    <div id="results" class="hidden">
+      <section class="kpis">
+        <div class="kpi"><span>Last close</span><b id="k-last">–</b></div>
+        <div class="kpi"><span id="k-pred-label">Predicted price</span><b id="k-pred">–</b><small id="k-ret"></small></div>
+        <div class="kpi"><span>95% range</span><b id="k-range">–</b></div>
+        <div class="kpi"><span>Signal</span><b id="k-signal" class="signal">–</b></div>
+      </section>
+
+      <section class="panel">
+        <h2>Price &amp; forecast</h2>
+        <canvas id="c-price" height="320"></canvas>
+        <div class="legend"><i class="l-close"></i>Close <i class="l-fc"></i>Forecast <i class="l-band"></i>Uncertainty</div>
+      </section>
+
+      <div class="grid2">
+        <section class="panel">
+          <h2>Strategy vs buy &amp; hold</h2>
+          <canvas id="c-eq" height="240"></canvas>
+          <div class="legend"><i class="l-fc"></i>ArthaSeer strategy <i class="l-close"></i>Buy &amp; hold</div>
+          <table id="t-bt" class="tbl"></table>
+        </section>
+        <section class="panel">
+          <h2>What drives the model</h2>
+          <div id="imp"></div>
+          <h2 class="mt">Model votes (predicted return)</h2>
+          <div id="votes"></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <h2>Honest validation <small>walk-forward, no look-ahead</small></h2>
+        <div class="scroll"><table id="t-metrics" class="tbl"></table></div>
+        <p class="note">Directional accuracy near 50% means the model is no better than a coin flip. Always compare to the "always up" baseline.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>Educational project &mdash; not financial advice. Markets are unpredictable; never trade real money on this output alone.</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
